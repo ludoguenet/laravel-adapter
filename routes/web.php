@@ -1,10 +1,17 @@
-<?php
+    <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Services\StockDataMarket;
 use Illuminate\Support\Facades\Route;
+use App\Services\JsonAnalyticsLibrary;
+use App\Http\Controllers\ProfileController;
+use App\Services\Adapters\JsonAnalyticsAdapter;
 
 Route::get('/', function () {
-    return view('welcome');
+    $service = new StockDataMarket(new JsonAnalyticsAdapter(new JsonAnalyticsLibrary()));
+
+    $data = $service->getStockDataFromApi();
+
+    return $service->getArrayAnalyticsData($data);
 });
 
 Route::get('/dashboard', function () {
